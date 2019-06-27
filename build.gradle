@@ -102,7 +102,8 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
             repository = 'xeniteu/tomcat'
             //tags = calcTags(project.ext.tomcat, project.ext.java, project.ext.os, project.hasProperty('extraTags') ? project.extraTags : [])
             tags = calcProjectTags(project)
-            //tags = []
+            pull = true
+            automaticTags = false
         }
     }
 
