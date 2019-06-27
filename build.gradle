@@ -2,6 +2,11 @@ plugins {
     id "eu.xenit.docker" version "4.0.3" apply false
 }
 
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
 String[] calcTags (Project project) {
     def tomcat = project.ext.tomcat
     def java = project.ext.java
@@ -19,7 +24,7 @@ String[] calcTags (Project project) {
         javaVersion += "u${java.version.update}"
 
     if(os.name == null) os.name="${os.vendor}-${os.version}"
-    
+
     tags << "${version.major}.${version.minor}.${version.rev}-${javaVersion}-${os.name}"
 
     if (tomcat.version.canonical) {
@@ -65,6 +70,10 @@ task printTags {
 }
 
 configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
 
     project.projectDir.mkdirs()
     project.buildDir.mkdirs()

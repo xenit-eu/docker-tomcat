@@ -1,14 +1,13 @@
 buildscript {
     ext {
         springBootVersion = '1.5.11.RELEASE'
-        gradlePluginVersion = '3.1.2-46'
     }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("eu.xenit.gradle:xenit-gradle-plugins:${gradlePluginVersion}")
     }
 }
 
@@ -26,6 +25,7 @@ targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 springBoot {
