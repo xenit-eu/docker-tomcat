@@ -1,0 +1,23 @@
+version: '2.1'
+
+services:
+  tomcat:
+    image: ${DOCKER_IMAGE}
+    ports:
+    - ${COMPOSE_TOMCAT_TCP_8080:-8080:8080}
+    volumes:
+    - ${WAR_PATH}:/usr/local/tomcat/webapps/ROOT.war:z
+    - jdbc:/jdbc/
+    environment:
+    - JAVA_OPTS=-Dtomcat.shared.loader.append=/jdbc/*.jar -Dtomcat.common.loader.append=/jdbc/*.jar
+    - TOMCAT_MAX_HTTP_HEADER_SIZE=16384
+    depends_on:
+    - jdbc-driver
+
+  jdbc-driver:
+    image: hub.xenit.eu/jdbc-mysql:5.1.42
+    volumes:
+    - jdbc:/jdbc/
+
+volumes:
+  jdbc:

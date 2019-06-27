@@ -1,0 +1,21 @@
+ext {
+    tomcat = [
+            version: [
+                    major: 7,
+                    minor: 0,
+                    rev  : 94,
+                    canonical: true
+            ]
+    ]
+    java = [
+            flavor : 'jdk',
+            version: [
+                    major: 7,
+                    update: 221
+            ]
+    ]
+    os = [
+            vendor   : 'centos',
+            version  : '7'
+    ]
+}

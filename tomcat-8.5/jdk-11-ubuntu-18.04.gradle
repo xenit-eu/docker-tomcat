@@ -1,0 +1,24 @@
+ext {
+    tomcat = [
+            version: [
+                    major: 8,
+                    minor: 5,
+                    rev: 42,
+                    canonical: true
+            ]
+    ]
+    java = [
+            flavor : 'jdk',
+            version: [
+                    major: 11,
+                    update: 3
+            ],
+            canonical: true
+    ]
+    os = [
+            vendor: 'ubuntu',
+            version: '18.04',
+            name: 'bionic'
+    ]
+    extraTags = [ "alfresco-6.0-ubuntu", "alfresco-6.1-ubuntu" ]
+}

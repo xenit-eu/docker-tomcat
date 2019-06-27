@@ -1,0 +1,59 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.11.RELEASE'
+        gradlePluginVersion = '3.1.2-46'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("eu.xenit.gradle:xenit-gradle-plugins:${gradlePluginVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+
+group = 'eu.xenit.tools.system'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+springBoot {
+    backupSource = false
+}
+
+
+configurations {
+    providedRuntime
+    wars
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    // Required for Tomcat 7.0 support
+    compile('javax.el:javax.el-api:3.0.0')
+
+    runtime('org.springframework.boot:spring-boot-devtools')
+
+    compileOnly('org.projectlombok:lombok')
+
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+artifacts {
+    wars war.archivePath
+}
+
+

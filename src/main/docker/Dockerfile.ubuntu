@@ -1,0 +1,110 @@
+ARG BASE_IMAGE=xeniteu/openjdk:jdk-8-trusty
+FROM $BASE_IMAGE
+
+ENV     CATALINA_HOME /usr/local/tomcat
+ENV     PATH $CATALINA_HOME/bin:$PATH
+WORKDIR $CATALINA_HOME
+
+ARG TOMCAT_MAJOR
+ENV TOMCAT_MAJOR ${TOMCAT_MAJOR:-7}
+
+ARG TOMCAT_MINOR
+ENV TOMCAT_MINOR ${TOMCAT_MINOR:-0}
+
+ARG TOMCAT_REVISION
+ENV TOMCAT_REVISION ${TOMCAT_REVISION:-78}
+
+ENV TOMCAT_VERSION ${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_REVISION}
+ENV TOMCAT_TGZ_URL https://archive.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+
+ENV TOMCAT_PORT=8080
+
+# copy init file
+COPY 	85-init-tomcat.sh /docker-entrypoint.d/
+
+# See https://www.apache.org/dist/tomcat/tomcat-8/KEYS
+RUN     apt-get update && \
+        apt-get install -y curl unzip xmlstarlet && \
+        mkdir -pv "${CATALINA_HOME}/shared/classes" && \
+        mkdir -pv "${CATALINA_HOME}/shared/lib" && \
+
+        set -x \
+            && curl --silent -fSL "$TOMCAT_TGZ_URL" -o tomcat.tar.gz \
+            && curl --silent -fSL "$TOMCAT_TGZ_URL.asc" -o tomcat.tar.gz.asc \
+            && tar -xvf tomcat.tar.gz --strip-components=1 \
+            && rm bin/*.bat \
+            && rm tomcat.tar.gz* && \
+
+        # Configure AccessLogValve & RemoteIpValve
+        xmlstarlet edit --inplace \
+            --var valve "/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Host/Valve[@className='org.apache.catalina.valves.AccessLogValve']/@pattern" \
+              --update '$valve' --value "%h %l %u %t &quot;%r&quot; %s %b %D %F" \
+            --var valve "/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Host/Valve[@className='org.apache.catalina.valves.AccessLogValve']" \
+            --append '$valve' --type elem --name Valve \
+                --var valve '$prev' \
+                --insert '$valve' --type attr --name className --value org.apache.catalina.valves.RemoteIpValve \
+                --insert '$valve' --type attr --name remoteIpHeader --value x-forwarded-for \
+                --insert '$valve' --type attr --name remoteIpProxiesHeader --value x-forwarded-by \
+                --insert '$valve' --type attr --name protocolHeader --value x-forwarded-proto \
+                --insert '$valve' --type attr --name internalProxies --value "172.(?:1[6-9]|2[0-9]|3[0-1]).\d{1,3}.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}" \
+            conf/server.xml && \
+
+        # Configure ports, header size and max threads
+        xmlstarlet edit --inplace \
+        --var server "/Server/@port" \
+            --update '$server' --value \$\{TOMCAT_SERVER_PORT\} \
+        --delete "/Server/Listener[@className='org.apache.catalina.core.JasperListener']" \
+        --delete "/Server/Listener[@className='org.apache.catalina.core.JreMemoryLeakPreventionListener']" \
+        --delete "/Server/Listener[@className='org.apache.catalina.core.ThreadLocalLeakPreventionListener']" \
+        --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"HTTP/1.1\"]/@port" \
+            --update '$connector' --value \$\{TOMCAT_PORT\} \
+            --insert '$connector' --type attr --name URIEncoding --value UTF-8 \
+            --insert '$connector' --type attr --name maxThreads --value \$\{TOMCAT_MAX_THREADS\} \
+            --insert '$connector' --type attr --name maxHttpHeaderSize --value \$\{TOMCAT_MAX_HTTP_HEADER_SIZE\} \
+        --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"HTTP/1.1\"]/@redirectPort" \
+            --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
+        --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"HTTP/1.1\"]" \
+            --append '$connector' --type attr --name URIEncoding --value UTF-8 \
+            --append '$connector' --type attr --name maxThreads --value \$\{TOMCAT_MAX_THREADS\} \
+            --append '$connector' --type attr --name maxHttpHeaderSize --value \$\{TOMCAT_MAX_HTTP_HEADER_SIZE\} \
+        --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"AJP/1.3\"]/@port" \
+            --update '$connector' --value \$\{TOMCAT_AJP_PORT\} \
+            --insert '$connector' --type attr --name URIEncoding --value UTF-8 \
+        --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"AJP/1.3\"]/@redirectPort" \
+           --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
+        ${CATALINA_HOME}/conf/server.xml && \
+
+
+        # Cleanup webapps stuff
+        rm -rf ${CATALINA_HOME}/webapps/* && \
+
+        # Create a tomcat user
+        useradd -r -u 990 --shell /bin/false tomcat && \
+        chown -hR tomcat ${CATALINA_HOME} && \
+
+        apt-get --purge -y remove curl unzip xmlstarlet && \
+        apt-get --purge -y autoremove && \
+        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+
+        # gosu
+        && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+        && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
+        && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.9/gosu-$dpkgArch" \
+        && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/1.9/gosu-$dpkgArch.asc" \
+        && export GNUPGHOME="$(mktemp -d)" \
+        && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+        && chmod +x /usr/local/bin/gosu \
+        && gosu nobody true \
+        && apt-get purge -y --auto-remove wget && \
+
+
+        sed -i 's/[a-z,.,1-9,-]*.(FileHandler|AsyncFileHandler)((,\s)|\n)//g' ${CATALINA_HOME}/conf/logging.properties && \
+
+        sed -i 's/^shared.loader=/shared.loader=${catalina.base}\/shared\/classes,${catalina.base}\/shared\/lib\/*.jar/' ${CATALINA_HOME}/conf/catalina.properties && \
+        sed -i 's/^\(common.loader=.*\)$/\1,${tomcat.common.loader.append}/' ${CATALINA_HOME}/conf/catalina.properties && \
+        sed -i 's/^\(shared.loader=.*\)$/\1,${tomcat.shared.loader.append}/' ${CATALINA_HOME}/conf/catalina.properties && \
+
+        chmod +x /docker-entrypoint.d/85-init-tomcat.sh
+
+EXPOSE 8080
+CMD ["gosu", "tomcat", "catalina.sh", "run"]

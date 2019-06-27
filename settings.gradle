@@ -1,0 +1,24 @@
+rootProject.name = 'docker-tomcat'
+
+rootProject.projectDir
+
+    // Find all projects that start with 'tomcat-'
+    .listFiles({ File file -> file.name.startsWith("tomcat-")} as FileFilter)
+
+    // Find all subprojects ~ '.gradle' files
+    .collectMany ({ File dist ->
+        dist.listFiles({ File file -> file.name.endsWith('.gradle')} as FileFilter).toList()
+    })
+
+    // For every tomcat '.gradle' file, create a (sub)project
+    .each { File projectFile ->
+        def tomcatFolder = projectFile.parentFile.name
+        def shortName = projectFile.name.take(projectFile.name.lastIndexOf('.'))
+        def projectName = "$tomcatFolder-$shortName"
+        File projectDir = file("${tomcatFolder}/${shortName}")
+
+        include projectName
+        project(":${projectName}").projectDir = projectDir
+    }
+
+include 'integration-tests:servlet-info'

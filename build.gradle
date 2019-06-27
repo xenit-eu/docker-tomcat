@@ -1,0 +1,176 @@
+plugins {
+    id "eu.xenit.docker" version "4.0.3" apply false
+}
+
+String[] calcTags (Project project) {
+    def tomcat = project.ext.tomcat
+    def java = project.ext.java
+    def os = project.ext.os
+
+    def tags = project.hasProperty('extraTags') ? project.extraTags : []
+
+    if (project.projectDir.name.startsWith('alfresco-'))
+        tags << project.projectDir.name
+
+    def version = tomcat.version
+
+    def javaVersion = "${java.flavor}-${java.version.major}"
+    if (java.version.update != null)
+        javaVersion += "u${java.version.update}"
+
+    if(os.name == null) os.name="${os.vendor}-${os.version}"
+    
+    tags << "${version.major}.${version.minor}.${version.rev}-${javaVersion}-${os.name}"
+
+    if (tomcat.version.canonical) {
+        tags << "${version.major}.${version.minor}-${javaVersion}-${os.name}"
+        tags << "${version.major}-${javaVersion}-${os.name}"
+    }
+
+    if (java.canonical) {
+        tags << "${version.major}.${version.minor}.${version.rev}-${os.name}"
+
+        if (tomcat.version.canonical) {
+            tags << "${version.major}.${version.minor}-${os.name}"
+            tags << "${version.major}-${os.name}"
+        }
+    }
+
+    return tags.unique()
+}
+
+def calcProjectTags = { Project p ->
+    //calcTags(p.ext.tomcat, p.ext.java, p.ext.os, p.hasProperty('extraTags') ? p.extraTags : [])
+    calcTags(p)
+}
+
+String getDockerBaseImage (Project p) {
+    String javaFlavor = p.java.flavor == 'jre' ? 'server-jre' : p.java.flavor
+    String javaPart = "${javaFlavor}-${p.java.version.major}"
+    if (p.java.version.update)
+        javaPart += "u${p.java.version.update}"
+
+    String osPart = (p.os.name != null) ? "${p.os.name}" : "${p.os.vendor}-${p.os.version}"
+    String javaRepo = p.java.name ? p.java.name : 'openjdk'
+
+    return "xeniteu/${javaRepo}:${javaPart}-${osPart}"
+}
+
+task printTags {
+    doFirst {
+        project.subprojects.findAll{ it.name.startsWith("tomcat-") }.each{
+            println "${calcProjectTags(it)} -> FROM ${getDockerBaseImage(it)}"
+        }
+    }
+}
+
+configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
+
+    project.projectDir.mkdirs()
+    project.buildDir.mkdirs()
+
+    apply plugin: 'eu.xenit.docker'
+    apply plugin: 'java'
+
+    apply from: "${project.projectDir}.gradle"
+
+    task copyDocker(type: Copy) {
+        from("$project.parent.projectDir/src/main/docker") {
+            include "Dockerfile.${project.os.vendor}"
+            rename "Dockerfile.${project.os.vendor}", 'Dockerfile'
+        }
+        from("$project.parent.projectDir/src/main/docker") {
+            include "85-init-tomcat.sh"
+        }
+        into "${project.buildDir}/docker"
+    }
+
+    buildDockerImage.dependsOn(copyDocker)
+
+    dockerFile {
+        dockerFile = file("${project.buildDir}/docker/Dockerfile")
+        dockerBuild {
+            repository = 'xeniteu/tomcat'
+            //tags = calcTags(project.ext.tomcat, project.ext.java, project.ext.os, project.hasProperty('extraTags') ? project.extraTags : [])
+            tags = calcProjectTags(project)
+            //tags = []
+        }
+    }
+
+    buildDockerImage {
+        buildArgs = [
+                'TOMCAT_MAJOR' : "${project.tomcat.version.major}",
+                'TOMCAT_MINOR' : "${project.tomcat.version.minor}",
+                'TOMCAT_REVISION': "${project.tomcat.version.rev}",
+
+                'BASE_IMAGE': getDockerBaseImage(project)
+        ]
+
+        if (project.hasProperty('extraBuildArgs'))
+            buildArgs << project.extraBuildArgs
+
+        doFirst {
+            println buildArgs
+        }
+    }
+
+
+
+    configurations {
+        war
+    }
+
+    dependencies {
+        war project(path: ':integration-tests:servlet-info', configuration: 'wars')
+    }
+
+    docker {
+        registryCredentials {
+            username = System.getenv("DOCKER_USER")
+            password = System.getenv("DOCKER_PASSWORD")
+        }
+    }
+
+    dockerCompose {
+        projectName = "tomcat-${project.name}"
+        useComposeFiles = ["${project.parent.project('integration-tests').projectDir}/src/main/compose/docker-compose.yml"]
+        captureContainersOutput = false
+
+        // Uncomment for quick iterations when developing integration tests
+        // stopContainers = false
+
+        environment.put 'COMPOSE_TOMCAT_TCP_8080', '8080'
+        environment.put 'WAR_PATH', project.configurations.war.singleFile.absolutePath
+
+        // start & stop docker-compose when running tests
+        isRequiredBy(project.tasks.test)
+    }
+
+    // make sure we build ':servlet-info' war artifact before running composeUp
+    // because we're referencing this .war as a volume in tomcat /webapps folder
+    composeUp.dependsOn ':integration-tests:servlet-info:war'
+
+    // To make sure that sourceSets property is available from ':integration-tests'
+    evaluationDependsOn(':integration-tests')
+
+    // test-sources are shared between projects
+    // import from project ':integration-tests'
+    test {
+        testClassesDirs = project(':integration-tests').sourceSets.main.output.classesDirs
+        classpath = project(':integration-tests').sourceSets.main.runtimeClasspath
+        outputs.upToDateWhen { false }
+
+        doFirst {
+            dockerCompose.exposeAsSystemProperties(test)
+
+            if("${project.java.version.major}"=='11' && "${project.os.vendor}"=='ubuntu')
+                systemProperty 'test.java.version', '11'
+            else
+                systemProperty 'test.java.version', "1.${project.java.version.major}"
+            systemProperty 'test.java.flavor', project.java.flavor
+        }
+    }
+
+}
+
+
