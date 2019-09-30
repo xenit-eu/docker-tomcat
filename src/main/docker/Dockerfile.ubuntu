@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=xeniteu/openjdk:jdk-8-trusty
+ARG BASE_IMAGE=xenit/openjdk:jdk-8-trusty
 FROM $BASE_IMAGE
 
 ENV     CATALINA_HOME /usr/local/tomcat

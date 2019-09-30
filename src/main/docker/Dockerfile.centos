@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=xeniteu/openjdk:jdk-7-centos-7
+ARG BASE_IMAGE=xenit/openjdk:jdk-7-centos-7
 FROM $BASE_IMAGE
 
 ENV     CATALINA_HOME /usr/local/tomcat

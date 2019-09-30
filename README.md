@@ -1,3 +1,5 @@
+
+
 # Apache Tomcat Docker Images
 
 This repository contains Apache Tomcat images from XeniT.
@@ -53,7 +55,7 @@ In general, the latest update (minor version) of the last few major Tomcat relea
 
 ### Base images
 
-All the available Tomcat images are built on top of the `xeniteu/openjdk` images.
+All the available Tomcat images are built on top of the `xenit/openjdk` images.
 
 ## Contributions
 
