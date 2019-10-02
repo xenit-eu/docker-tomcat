@@ -55,7 +55,7 @@ In general, the latest update (minor version) of the last few major Tomcat relea
 
 ### Base images
 
-All the available Tomcat images are built on top of the `xenit/openjdk` images.
+All the available Tomcat images are built on top of the `docker.io/xenit/openjdk` images.
 
 ## Contributions
 

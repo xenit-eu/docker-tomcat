@@ -58,7 +58,7 @@ String getDockerBaseImage (Project p) {
     String osPart = (p.os.name != null) ? "${p.os.name}" : "${p.os.vendor}-${p.os.version}"
     String javaRepo = p.java.name ? p.java.name : 'openjdk'
 
-    return "xenit/${javaRepo}:${javaPart}-${osPart}"
+    return "docker.io/xenit/${javaRepo}:${javaPart}-${osPart}"
 }
 
 task printTags {
@@ -99,7 +99,7 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
     dockerFile {
         dockerFile = file("${project.buildDir}/docker/Dockerfile")
         dockerBuild {
-            repository = 'xenit/tomcat'
+            repository = 'docker.io/xenit/tomcat'
             //tags = calcTags(project.ext.tomcat, project.ext.java, project.ext.os, project.hasProperty('extraTags') ? project.extraTags : [])
             tags = calcProjectTags(project)
             pull = true
