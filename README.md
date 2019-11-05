@@ -15,6 +15,22 @@ by the Apache Software Foundation.
 * [alfresco-5.2-ubuntu, 7.0.94-jdk-8u212-xenial, 7.0-jdk-8u212-xenial, 7-jdk-8u212-xenial, 7.0.94-xenial, 7.0-xenial, 7-xenial]
 * [alfresco-6.0-ubuntu, alfresco-6.1-ubuntu, 8.5.42-jdk-11u3-bionic, 8.5-jdk-11u3-bionic, 8-jdk-11u3-bionic, 8.5.42-bionic, 8.5-bionic, 8-bionic]
 
+## Environment variables
+
+There are several environment variables available to tweak the behaviour. While none of the variables are required, they may significantly aid you in using these images.
+The variables are read by an init script which further sets JAVA_OPTS variables to be used in tomcat's templated configuration file server.xml.
+
+Environment variables:
+
+| Variable                    |  Default                        | Java variable |
+| --------------------------- | ------------------------------- | --------------------------- |
+| TOMCAT_PORT                 |  8080                           | -DTOMCAT_PORT                |                                                         
+| TOMCAT_PORT_SSL             |  8443                           | -DTOMCAT_PORT_SSL            |                                                         
+| TOMCAT_AJP_PORT             |  8009                           | -DTOMCAT_AJP_PORT            |                                                          
+| TOMCAT_SERVER_PORT          |  8005                           | -DTOMCAT_SERVER_PORT         |                                                          
+| TOMCAT_MAX_HTTP_HEADER_SIZE |  32768                          | -DTOMCAT_MAX_HTTP_HEADER_SIZE  or -DMAX_HTTP_HEADER_SIZE   |                                         |  |
+| TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS                        |                                                           |  |
+
 
 ## Quick reference
 
@@ -69,5 +85,3 @@ To build a local version of the _tomcat_ image:
 ./gradlew buildDockerImage
 ```
 
-Note that locally build image-tags will be prefixed with `local-`, so they can be clearly distinguished from official
-builds created and published from [Travis](https://travis-ci.org/xenit-eu/).
