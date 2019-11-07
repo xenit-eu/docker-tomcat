@@ -28,8 +28,10 @@ Environment variables:
 | TOMCAT_PORT_SSL             |  8443                           | -DTOMCAT_PORT_SSL            |                                                         
 | TOMCAT_AJP_PORT             |  8009                           | -DTOMCAT_AJP_PORT            |                                                          
 | TOMCAT_SERVER_PORT          |  8005                           | -DTOMCAT_SERVER_PORT         |                                                          
-| TOMCAT_MAX_HTTP_HEADER_SIZE |  32768                          | -DTOMCAT_MAX_HTTP_HEADER_SIZE  or -DMAX_HTTP_HEADER_SIZE   |                                         |  |
-| TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS                        |                                                           |  |
+| TOMCAT_MAX_HTTP_HEADER_SIZE |  32768                          | -DTOMCAT_MAX_HTTP_HEADER_SIZE  or -DMAX_HTTP_HEADER_SIZE   |  
+| TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS                        |
+| TOMCAT_ACCESS_LOGS_ROTATABLE|  true                           | -DTOMCAT_ACCESS_LOGS_ROTATABLE                        |
+| TOMCAT_ACCESS_LOGS_MAX_DAYS |  -1                             | -DTOMCAT_ACCESS_LOGS_MAX_DAYS                        |
 
 
 ## Quick reference

@@ -7,19 +7,6 @@ function setJavaOption {
     JAVA_OPTS="$JAVA_OPTS $2"
 }
 
-function setJavaOptions {
-    IFS=$'\n'
-    for i in `env`
-    do
-	if [[ $i == JAVA_OPTS_* ]]
-	    then
-	    key=`echo $i | cut -d '=' -f 1 | cut -d '_' -f 3-`
-	    value=`echo $i | cut -d '=' -f 2-`
-	    setJavaOption $key $value
-	fi
-    done
-}
-
 TOMCAT_CONTEXT_FILE=${CATALINA_HOME}'/conf/context.xml'
 TOMCAT_CONFIG_FILE=${CATALINA_HOME}'/bin/setenv.sh'
 
@@ -33,7 +20,8 @@ BC_TOMCAT_MAX_HTTP_HEADER_SIZE=${TOMCAT_MAX_HTTP_HEADER_SIZE:-$MAX_HTTP_HEADER_S
 setJavaOption 'TOMCAT_MAX_HTTP_HEADER_SIZE' '-DTOMCAT_MAX_HTTP_HEADER_SIZE='${BC_TOMCAT_MAX_HTTP_HEADER_SIZE:-32768}
 BC_TOMCAT_MAX_THREADS=${TOMCAT_MAX_THREADS:-$MAX_THREADS}
 setJavaOption 'TOMCAT_MAX_THREADS' '-DTOMCAT_MAX_THREADS='${BC_TOMCAT_MAX_THREADS:-200}
-
+setJavaOption 'TOMCAT_ACCESS_LOGS_ROTATABLE' '-DTOMCAT_ACCESS_LOGS_ROTATABLE='${TOMCAT_ACCESS_LOGS_ROTATABLE:-'true'}
+setJavaOption 'TOMCAT_ACCESS_LOGS_MAX_DAYS' '-DTOMCAT_ACCESS_LOGS_MAX_DAYS='${TOMCAT_ACCESS_LOGS_MAX_DAYS:-'-1'}
 
 sed -i "s|\(<Context>\)|\1\n<Manager pathname=\"\" />|" ${TOMCAT_CONTEXT_FILE} || exit 1 # No persistent sessions after restart
 
