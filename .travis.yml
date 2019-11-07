@@ -1,19 +1,28 @@
-language: java
 sudo: required
 dist: trusty
 services:
-- docker
+  - docker
+
+language: java
+jdk: oraclejdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
-  - "$HOME/.gradle"
-matrix:
-  include:
-  - os: linux
-    jdk: oraclejdk8
-    env:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+env:
+  global:
     - DOCKER_USER=xenitpublisher
     - secure: "Oo4NmPcIKK2asOtfbj/e3lBBjI9lsEIAd4c/QhI3ZML6d9sbMaB3Cpul1szk52tUMMZXfMK2kLy21fWx9xug7wHAgzGSJ4QfWaApQEE9iHcB3K5SV0R1mEIlfJT1JIo6XeLzw/HwWLA3U3Z4kWdXV8b2TuT/QJTVbs92d2ZS5+LsbNKPeOJKJVVqR6KrXE3GtmJah8pQkA6+gxFaHRawHWTS4usLTs3p07Tqd3+5xXfq0DK81c7Y93L/PmNwRVpbKaZ9W7JxZi0N80w588N99mC43tVbv/Vxs75zf0XJZmH3lC6whu1AizTgRBp0QZ1MBrv1SZz0eHg2OYW2KVxOb+oKvplzjzm9YAVBI0lcWDdRuVEbeJyZ1TIE3WYCJoS+tqRHo2m3StM3D1+16t/hPGW1XFMZxB7qmyfaUFNA3LGcR0XLQYRxyPCQBtGDyTRA3l7uZWGgqy1qSappkg5U+hIhO4+mwyPHBqIeBckPhJc4Bc6lTwTK2vXkO/kMkiUYocSlF3M7ySs0zbhwlJglznQrAjQTXea24jCVwOYJ16DV/1j7UXNU0VMmIKvRJK4MPIBIHajHMc98hSW8NpV9p/0TpYY7tfGVC7NjrD5I1pcOS58GZj3a+1xa6hExgSvGTzxtxLkxQGdc6YRpQ+1U+9lFJDArxYlkTe+nnVqRXMM="
-    before_install:
-    - chmod +x ./gradlew
-    script:
-    - if [[ $TRAVIS_BRANCH = "master" ]] ; then ./gradlew pushDockerImage ; else ./gradlew check --info ; fi
+
+script: ./gradlew check --info
+
+deploy:
+  provider: script
+  script: ./gradlew pushDockerImage
+  on:
+    branch: master
