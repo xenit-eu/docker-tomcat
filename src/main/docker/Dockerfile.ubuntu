@@ -40,8 +40,8 @@ RUN     apt-get update && \
             --var valve "/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Host/Valve[@className='org.apache.catalina.valves.AccessLogValve']/@pattern" \
               --update '$valve' --value "%h %l %u %t &quot;%r&quot; %s %b %D %F" \
             --var valve "/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Host/Valve[@className='org.apache.catalina.valves.AccessLogValve']" \	      
-              --insert '$valve' --type attr --name rotatable --value \$\{TOMCAT_ACCESS_LOGS_ROTATABLE\} \
-              --insert '$valve' --type attr --name maxDays --value \$\{TOMCAT_ACCESS_LOGS_MAX_DAYS\} \
+              --insert '$valve' --type attr --name rotatable --value \$\{TOMCAT_ACCESSLOG_ROTATE\} \
+              --insert '$valve' --type attr --name maxDays --value \$\{TOMCAT_ACCESSLOG_MAXDAYS\} \
               --append '$valve' --type elem --name Valve \
                 --var valve '$prev' \
                 --insert '$valve' --type attr --name className --value org.apache.catalina.valves.RemoteIpValve \

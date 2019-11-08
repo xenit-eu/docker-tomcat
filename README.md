@@ -30,8 +30,8 @@ Environment variables:
 | TOMCAT_SERVER_PORT          |  8005                           | -DTOMCAT_SERVER_PORT         |                                                          
 | TOMCAT_MAX_HTTP_HEADER_SIZE |  32768                          | -DTOMCAT_MAX_HTTP_HEADER_SIZE  or -DMAX_HTTP_HEADER_SIZE   |  
 | TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS                        |
-| TOMCAT_ACCESS_LOGS_ROTATABLE|  true                           | -DTOMCAT_ACCESS_LOGS_ROTATABLE                        |
-| TOMCAT_ACCESS_LOGS_MAX_DAYS |  -1                             | -DTOMCAT_ACCESS_LOGS_MAX_DAYS                        |
+| TOMCAT_ACCESSLOG_ROTATE|  true                           | -DTOMCAT_ACCESSLOG_ROTATE                        |
+| TOMCAT_ACCESSLOG_MAXDAYS |  -1                             | -DTOMCAT_ACCESSLOG_MAXDAYS                        |
 
 
 ## Quick reference
