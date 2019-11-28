@@ -13,7 +13,7 @@ by the Apache Software Foundation.
 * [alfresco-4.2-ubuntu, 7.0.94-jdk-7u211-trusty, 7.0-jdk-7u211-trusty, 7-jdk-7u211-trusty]
 * [alfresco-5.0-ubuntu, alfresco-5.1-ubuntu, 7.0.94-jdk-8u212-trusty, 7.0-jdk-8u212-trusty, 7-jdk-8u212-trusty]
 * [alfresco-5.2-ubuntu, 7.0.94-jdk-8u212-xenial, 7.0-jdk-8u212-xenial, 7-jdk-8u212-xenial, 7.0.94-xenial, 7.0-xenial, 7-xenial]
-* [alfresco-6.0-ubuntu, alfresco-6.1-ubuntu, 8.5.42-jdk-11u3-bionic, 8.5-jdk-11u3-bionic, 8-jdk-11u3-bionic, 8.5.42-bionic, 8.5-bionic, 8-bionic]
+* [alfresco-6.0-ubuntu, alfresco-6.1-ubuntu, alfresco-6.2-ubuntu, 8.5.49-jdk-11u3-bionic, 8.5-jdk-11u3-bionic, 8-jdk-11u3-bionic, 8.5.49-bionic, 8.5-bionic, 8-bionic]
 
 ## Environment variables
 
