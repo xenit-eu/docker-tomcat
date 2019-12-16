@@ -23,15 +23,16 @@ The variables are read by an init script which further sets JAVA_OPTS variables 
 Environment variables:
 
 | Variable                    |  Default                        | Java variable |
-| --------------------------- | ------------------------------- | --------------------------- |
-| TOMCAT_PORT                 |  8080                           | -DTOMCAT_PORT                |                                                         
-| TOMCAT_PORT_SSL             |  8443                           | -DTOMCAT_PORT_SSL            |                                                         
-| TOMCAT_AJP_PORT             |  8009                           | -DTOMCAT_AJP_PORT            |                                                          
-| TOMCAT_SERVER_PORT          |  8005                           | -DTOMCAT_SERVER_PORT         |                                                          
-| TOMCAT_MAX_HTTP_HEADER_SIZE |  32768                          | -DTOMCAT_MAX_HTTP_HEADER_SIZE  or -DMAX_HTTP_HEADER_SIZE   |  
-| TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS                        |
-| TOMCAT_ACCESSLOG_ROTATE|  true                           | -DTOMCAT_ACCESSLOG_ROTATE                        |
-| TOMCAT_ACCESSLOG_MAXDAYS |  -1                             | -DTOMCAT_ACCESSLOG_MAXDAYS                        |
+| --------------------------- | ------------------------------- | ---------------------------- |
+| TOMCAT_PORT                 |  8080                           | -DTOMCAT_PORT                |
+| TOMCAT_PORT_SSL             |  8443                           | -DTOMCAT_PORT_SSL            |
+| TOMCAT_AJP_PORT             |  8009                           | -DTOMCAT_AJP_PORT            |
+| TOMCAT_SERVER_PORT          |  8005                           | -DTOMCAT_SERVER_PORT         |
+| TOMCAT_MAX_HTTP_HEADER_SIZE |  32768                          | -DTOMCAT_MAX_HTTP_HEADER_SIZE  or -DMAX_HTTP_HEADER_SIZE |
+| TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS |
+| TOMCAT_ACCESSLOG_ROTATE     |  true                           | -DTOMCAT_ACCESSLOG_ROTATE    |
+| TOMCAT_ACCESSLOG_MAXDAYS    |  -1                             | -DTOMCAT_ACCESSLOG_MAXDAYS   |
+| TOMCAT_RELAXED_QUERY_CHARS  |  ""                             | -DTOMCAT_RELAXED_QUERY_CHARS |
 
 
 ## Quick reference
