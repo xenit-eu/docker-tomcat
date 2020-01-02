@@ -33,6 +33,7 @@ Environment variables:
 | TOMCAT_ACCESSLOG_ROTATE     |  true                           | -DTOMCAT_ACCESSLOG_ROTATE    |
 | TOMCAT_ACCESSLOG_MAXDAYS    |  -1                             | -DTOMCAT_ACCESSLOG_MAXDAYS   |
 | TOMCAT_RELAXED_QUERY_CHARS  |  ""                             | -DTOMCAT_RELAXED_QUERY_CHARS |
+| TOMCAT_RELAXED_PATH_CHARS   |  ""                             | -DTOMCAT_RELAXED_PATH_CHARS  |
 
 
 ## Quick reference

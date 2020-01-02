@@ -64,6 +64,7 @@ RUN     apt-get update && \
             --insert '$connector' --type attr --name maxThreads --value \$\{TOMCAT_MAX_THREADS\} \
             --insert '$connector' --type attr --name maxHttpHeaderSize --value \$\{TOMCAT_MAX_HTTP_HEADER_SIZE\} \
             --insert '$connector' --type attr --name relaxedQueryChars --value \$\{TOMCAT_RELAXED_QUERY_CHARS\} \
+            --insert '$connector' --type attr --name relaxedPathChars --value \$\{TOMCAT_RELAXED_PATH_CHARS\} \
         --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"HTTP/1.1\"]/@redirectPort" \
             --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
         --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"HTTP/1.1\"]" \
@@ -71,6 +72,7 @@ RUN     apt-get update && \
             --append '$connector' --type attr --name maxThreads --value \$\{TOMCAT_MAX_THREADS\} \
             --append '$connector' --type attr --name maxHttpHeaderSize --value \$\{TOMCAT_MAX_HTTP_HEADER_SIZE\} \
             --append '$connector' --type attr --name relaxedQueryChars --value \$\{TOMCAT_RELAXED_QUERY_CHARS\} \
+            --append '$connector' --type attr --name relaxedPathChars --value \$\{TOMCAT_RELAXED_PATH_CHARS\} \
         --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"AJP/1.3\"]/@port" \
             --update '$connector' --value \$\{TOMCAT_AJP_PORT\} \
             --insert '$connector' --type attr --name URIEncoding --value UTF-8 \
