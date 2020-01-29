@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=docker.io/xenit/openjdk:jdk-8-trusty
+ARG BASE_IMAGE=docker.io/xenit/openjdk:jdk-8-bionic
 FROM $BASE_IMAGE
 
 ENV     CATALINA_HOME /usr/local/tomcat
