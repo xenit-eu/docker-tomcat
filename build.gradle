@@ -44,11 +44,6 @@ String[] calcTags (Project project) {
     return tags.unique()
 }
 
-def calcProjectTags = { Project p ->
-    //calcTags(p.ext.tomcat, p.ext.java, p.ext.os, p.hasProperty('extraTags') ? p.extraTags : [])
-    calcTags(p)
-}
-
 String getDockerBaseImage (Project p) {
     String javaFlavor = p.java.flavor == 'jre' ? 'server-jre' : p.java.flavor
     String javaPart = "${javaFlavor}-${p.java.version.major}"
@@ -63,8 +58,8 @@ String getDockerBaseImage (Project p) {
 
 task printTags {
     doFirst {
-        project.subprojects.findAll{ it.name.startsWith("tomcat-") }.each{
-            println "${calcProjectTags(it)} -> FROM ${getDockerBaseImage(it)}"
+        project.subprojects.collect().reverse().findAll{ it.name.startsWith("tomcat-") }.each{
+            println "* ${calcTags(it).collect{"`${it}`"}.join(', ')}"
         }
     }
 }
@@ -101,7 +96,7 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         dockerBuild {
             repository = 'docker.io/xenit/tomcat'
             //tags = calcTags(project.ext.tomcat, project.ext.java, project.ext.os, project.hasProperty('extraTags') ? project.extraTags : [])
-            tags = calcProjectTags(project)
+            tags = calcTags(project)
             pull = true
             automaticTags = false
         }

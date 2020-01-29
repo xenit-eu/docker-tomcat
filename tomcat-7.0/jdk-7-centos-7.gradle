@@ -18,4 +18,5 @@ ext {
             vendor   : 'centos',
             version  : '7'
     ]
+    extraTags = [ "alfresco-4.2-centos" ]
 }

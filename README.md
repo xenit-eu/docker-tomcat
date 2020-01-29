@@ -1,19 +1,15 @@
-
-
 # Apache Tomcat Docker Images
 
-This repository contains Apache Tomcat images from XeniT.
+Docker Image of Apache Tomcat maintained by XeniT.
 
-Apache Tomcat (or simply Tomcat) is an open source web server and servlet container developed
-by the Apache Software Foundation.
+Apache Tomcat is an open source web server and servlet container, by the Apache Software Foundation.
 
 ## Supported tags
 
-* [7.0.94-jdk-7u221-centos-7, 7.0-jdk-7u221-centos-7, 7-jdk-7u221-centos-7]
-* [alfresco-4.2-ubuntu, 7.0.94-jdk-7u211-trusty, 7.0-jdk-7u211-trusty, 7-jdk-7u211-trusty]
-* [alfresco-5.0-ubuntu, alfresco-5.1-ubuntu, 7.0.94-jdk-8u212-bionic, 7.0-jdk-8u212-bionic, 7-jdk-8u212-bionic]
-* [alfresco-5.2-ubuntu, 7.0.94-jdk-8u212-bionic, 7.0-jdk-8u212-bionic, 7-jdk-8u212-bionic, 7.0.94-bionic, 7.0-bionic, 7-bionic]
-* [alfresco-6.0-ubuntu, alfresco-6.1-ubuntu, alfresco-6.2-ubuntu, 8.5.49-jdk-11u3-bionic, 8.5-jdk-11u3-bionic, 8-jdk-11u3-bionic, 8.5.49-bionic, 8.5-bionic, 8-bionic]
+* `alfresco-6.2-ubuntu`, `alfresco-6.1-ubuntu`, `alfresco-6.0-ubuntu`, `8.5.49-jdk-11u3-bionic`, `8.5-jdk-11u3-bionic`, `8-jdk-11u3-bionic`, `8.5.49-bionic`, `8.5-bionic`, `8-bionic`
+* `alfresco-5.2-ubuntu`, `alfresco-5.1-ubuntu`, `alfresco-5.0-ubuntu`, `7.0.94-jdk-8u212-bionic`, `7.0-jdk-8u212-bionic`, `7-jdk-8u212-bionic`, `7.0.94-bionic`, `7.0-bionic`, `7-bionic`
+* `alfresco-4.2-ubuntu`, `7.0.94-jdk-7u211-trusty`, `7.0-jdk-7u211-trusty`, `7-jdk-7u211-trusty`
+* `alfresco-4.2-centos`, `7.0.94-jdk-7u221-centos-7`, `7.0-jdk-7u221-centos-7`, `7-jdk-7u221-centos-7`
 
 ## Environment variables
 
@@ -83,7 +79,7 @@ All the available Tomcat images are built on top of the `docker.io/xenit/openjdk
 
 Release builds are produced by [Travis](https://travis-ci.org/xenit-eu/) driving Gradle from a `.travis.yml` file.
 
-To build a local version of the _tomcat_ image:
+To build a local version of the _tomcat_ images:
 
 ```
 ./gradlew buildDockerImage
