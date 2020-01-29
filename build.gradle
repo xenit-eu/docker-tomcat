@@ -1,5 +1,6 @@
 plugins {
-    id "eu.xenit.docker" version "4.0.3" apply false
+    id 'eu.xenit.docker' version '5.0.1' apply false
+    id 'eu.xenit.docker-compose' version '5.0.1' apply false
 }
 
 repositories {
@@ -74,6 +75,7 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
     project.buildDir.mkdirs()
 
     apply plugin: 'eu.xenit.docker'
+    apply plugin: 'eu.xenit.docker-compose'
     apply plugin: 'java'
 
     apply from: "${project.projectDir}.gradle"
@@ -96,7 +98,7 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         dockerBuild {
             repository = 'docker.io/xenit/tomcat'
             //tags = calcTags(project.ext.tomcat, project.ext.java, project.ext.os, project.hasProperty('extraTags') ? project.extraTags : [])
-            tags = calcTags(project)
+            tags = calcTags(project).collect()
             pull = true
             automaticTags = false
         }
