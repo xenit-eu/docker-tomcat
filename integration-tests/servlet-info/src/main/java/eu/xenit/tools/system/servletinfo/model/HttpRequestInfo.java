@@ -1,16 +1,11 @@
 package eu.xenit.tools.system.servletinfo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.http.HttpHeaders;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 
-@Getter
-@AllArgsConstructor
 public class HttpRequestInfo {
 
     private final String scheme;
@@ -48,4 +43,63 @@ public class HttpRequestInfo {
         this.cookies = request.getCookies();
     }
 
+    public HttpRequestInfo(String scheme, String serverName, int serverPort, String localName, int localPort,
+            String remoteHost, String remoteUser, String remoteAddr, int remotePort, HttpHeaders headers,
+            Cookie[] cookies) {
+        this.scheme = scheme;
+        this.serverName = serverName;
+        this.serverPort = serverPort;
+        this.localName = localName;
+        this.localPort = localPort;
+        this.remoteHost = remoteHost;
+        this.remoteUser = remoteUser;
+        this.remoteAddr = remoteAddr;
+        this.remotePort = remotePort;
+        this.headers = headers;
+        this.cookies = cookies;
+    }
+
+    public String getScheme() {
+        return this.scheme;
+    }
+
+    public String getServerName() {
+        return this.serverName;
+    }
+
+    public int getServerPort() {
+        return this.serverPort;
+    }
+
+    public String getLocalName() {
+        return this.localName;
+    }
+
+    public int getLocalPort() {
+        return this.localPort;
+    }
+
+    public String getRemoteHost() {
+        return this.remoteHost;
+    }
+
+    public String getRemoteUser() {
+        return this.remoteUser;
+    }
+
+    public String getRemoteAddr() {
+        return this.remoteAddr;
+    }
+
+    public int getRemotePort() {
+        return this.remotePort;
+    }
+
+    public HttpHeaders getHeaders() {
+        return this.headers;
+    }
+
+    public Cookie[] getCookies() {
+        return this.cookies;
+    }
 }
