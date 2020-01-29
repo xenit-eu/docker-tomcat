@@ -11,8 +11,8 @@ by the Apache Software Foundation.
 
 * [7.0.94-jdk-7u221-centos-7, 7.0-jdk-7u221-centos-7, 7-jdk-7u221-centos-7]
 * [alfresco-4.2-ubuntu, 7.0.94-jdk-7u211-trusty, 7.0-jdk-7u211-trusty, 7-jdk-7u211-trusty]
-* [alfresco-5.0-ubuntu, alfresco-5.1-ubuntu, 7.0.94-jdk-8u212-trusty, 7.0-jdk-8u212-trusty, 7-jdk-8u212-trusty]
-* [alfresco-5.2-ubuntu, 7.0.94-jdk-8u212-xenial, 7.0-jdk-8u212-xenial, 7-jdk-8u212-xenial, 7.0.94-xenial, 7.0-xenial, 7-xenial]
+* [alfresco-5.0-ubuntu, alfresco-5.1-ubuntu, 7.0.94-jdk-8u212-bionic, 7.0-jdk-8u212-bionic, 7-jdk-8u212-bionic]
+* [alfresco-5.2-ubuntu, 7.0.94-jdk-8u212-bionic, 7.0-jdk-8u212-bionic, 7-jdk-8u212-bionic, 7.0.94-bionic, 7.0-bionic, 7-bionic]
 * [alfresco-6.0-ubuntu, alfresco-6.1-ubuntu, alfresco-6.2-ubuntu, 8.5.49-jdk-11u3-bionic, 8.5-jdk-11u3-bionic, 8-jdk-11u3-bionic, 8.5.49-bionic, 8.5-bionic, 8-bionic]
 
 ## Environment variables
@@ -63,8 +63,8 @@ tomcat:<version>[-<java>[-<os>]]
 ```
 
 * **version**: the Tomcat version
-* **java**: the Java distribution and version, for example `jdk-8` or `jdk-8u212-trusty`
-* **os**: the Operating System, for example `xenial` or `centos-7`
+* **java**: the Java distribution and version, for example `jdk-8` or `jdk-8u212-bionic`
+* **os**: the Operating System, for example `bionic` or `centos-7`
 
 ### Tomcat versions
 
