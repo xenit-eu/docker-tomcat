@@ -1,10 +1,9 @@
-sudo: required
-dist: trusty
+dist: xenial
+language: java
+jdk: openjdk8
+
 services:
   - docker
-
-language: java
-jdk: oraclejdk8
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -14,6 +13,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
 env:
   global:
     - DOCKER_USER=xenitpublisher
@@ -22,6 +22,7 @@ env:
 script: ./gradlew check --info
 
 deploy:
+  skip_cleanup: true
   provider: script
   script: ./gradlew pushDockerImage
   on:
