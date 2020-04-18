@@ -6,8 +6,8 @@ Apache Tomcat is an open source web server and servlet container, by the Apache 
 
 ## Supported tags
 
-* `alfresco-6.2-ubuntu`, `alfresco-6.1-ubuntu`, `alfresco-6.0-ubuntu`, `8.5.53-jdk-11u3-bionic`, `8.5-jdk-11u3-bionic`, `8-jdk-11u3-bionic`, `8.5.53-bionic`, `8.5-bionic`, `8-bionic`
-* `alfresco-5.2-ubuntu`, `alfresco-5.1-ubuntu`, `alfresco-5.0-ubuntu`, `7.0.103-jdk-8u212-bionic`, `7.0-jdk-8u212-bionic`, `7-jdk-8u212-bionic`, `7.0.103-bionic`, `7.0-bionic`, `7-bionic`
+* `alfresco-6.2-ubuntu`, `alfresco-6.1-ubuntu`, `alfresco-6.0-ubuntu`, `8.5.53-jdk-11u7-bionic`, `8.5-jdk-11u7-bionic`, `8-jdk-11u7-bionic`, `8.5.53-bionic`, `8.5-bionic`, `8-bionic`
+* `alfresco-5.2-ubuntu`, `alfresco-5.1-ubuntu`, `alfresco-5.0-ubuntu`, `7.0.103-jdk-8u252-bionic`, `7.0-jdk-8u252-bionic`, `7-jdk-8u252-bionic`, `7.0.103-bionic`, `7.0-bionic`, `7-bionic`
 * `alfresco-4.2-ubuntu`, `7.0.103-jdk-7u211-trusty`, `7.0-jdk-7u211-trusty`, `7-jdk-7u211-trusty`
 * `alfresco-4.2-centos`, `7.0.103-jdk-7u221-centos-7`, `7.0-jdk-7u221-centos-7`, `7-jdk-7u221-centos-7`
 
@@ -59,7 +59,7 @@ tomcat:<version>[-<java>[-<os>]]
 ```
 
 * **version**: the Tomcat version
-* **java**: the Java distribution and version, for example `jdk-8` or `jdk-8u212-bionic`
+* **java**: the Java distribution and version, for example `jdk-8` or `jdk-8u252-bionic`
 * **os**: the Operating System, for example `bionic` or `centos-7`
 
 ### Tomcat versions
