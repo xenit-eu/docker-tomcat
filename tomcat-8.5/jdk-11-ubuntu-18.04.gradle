@@ -11,7 +11,7 @@ ext {
             flavor : 'jdk',
             version: [
                     major: 11,
-                    update: 3
+                    update: 7
             ],
             canonical: true
     ]
