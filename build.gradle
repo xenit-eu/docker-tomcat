@@ -8,7 +8,7 @@ repositories {
     jcenter()
 }
 
-String[] calcTags (Project project) {
+String[] calcTags(Project project) {
     def tomcat = project.ext.tomcat
     def java = project.ext.java
     def os = project.ext.os
@@ -24,7 +24,7 @@ String[] calcTags (Project project) {
     if (java.version.update != null)
         javaVersion += "u${java.version.update}"
 
-    if(os.name == null) os.name="${os.vendor}-${os.version}"
+    if (os.name == null) os.name = "${os.vendor}-${os.version}"
 
     tags << "${version.major}.${version.minor}.${version.rev}-${javaVersion}-${os.name}"
 
@@ -45,7 +45,7 @@ String[] calcTags (Project project) {
     return tags.unique()
 }
 
-String getDockerBaseImage (Project p) {
+String getDockerBaseImage(Project p) {
     String javaFlavor = p.java.flavor == 'jre' ? 'server-jre' : p.java.flavor
     String javaPart = "${javaFlavor}-${p.java.version.major}"
     if (p.java.version.update)
@@ -59,8 +59,8 @@ String getDockerBaseImage (Project p) {
 
 task printTags {
     doFirst {
-        project.subprojects.collect().reverse().findAll{ it.name.startsWith("tomcat-") }.each{
-            println "* ${calcTags(it).collect{"`${it}`"}.join(', ')}"
+        project.subprojects.collect().reverse().findAll { it.name.startsWith("tomcat-") }.each {
+            println "* ${calcTags(it).collect { "`${it}`" }.join(', ')}"
         }
     }
 }
@@ -106,11 +106,11 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
 
     buildDockerImage {
         buildArgs = [
-                'TOMCAT_MAJOR' : "${project.tomcat.version.major}",
-                'TOMCAT_MINOR' : "${project.tomcat.version.minor}",
+                'TOMCAT_MAJOR'   : "${project.tomcat.version.major}",
+                'TOMCAT_MINOR'   : "${project.tomcat.version.minor}",
                 'TOMCAT_REVISION': "${project.tomcat.version.rev}",
 
-                'BASE_IMAGE': getDockerBaseImage(project)
+                'BASE_IMAGE'     : getDockerBaseImage(project)
         ]
 
         if (project.hasProperty('extraBuildArgs'))
@@ -120,7 +120,6 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
             println buildArgs
         }
     }
-
 
 
     configurations {
@@ -140,7 +139,9 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
 
     dockerCompose {
         projectName = "tomcat-${project.name}"
-        useComposeFiles = ["${project.parent.project('integration-tests').projectDir}/src/main/compose/docker-compose.yml"]
+        useComposeFiles = [
+                "${project.parent.project('integration-tests').projectDir}/src/main/compose/docker-compose.yml"
+        ]
         captureContainersOutput = false
 
         // Uncomment for quick iterations when developing integration tests
@@ -170,14 +171,13 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         doFirst {
             dockerCompose.exposeAsSystemProperties(test)
 
-            if("${project.java.version.major}"=='11' && "${project.os.vendor}"=='ubuntu')
+            if ("${project.java.version.major}" == '11' && "${project.os.vendor}" == 'ubuntu')
                 systemProperty 'test.java.version', '11'
             else
                 systemProperty 'test.java.version', "1.${project.java.version.major}"
             systemProperty 'test.java.flavor', project.java.flavor
         }
     }
-
 }
 
 
