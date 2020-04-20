@@ -1,0 +1,18 @@
+version: '2.1'
+
+services:
+  goss:
+    image: aelsabbahy/goss
+    command: goss --version
+    volumes:
+      - goss:/goss
+
+  tomcat:
+    depends_on:
+      - goss
+    volumes:
+      - goss:/goss
+      - ./goss.yaml:/goss.yaml
+
+volumes:
+  goss:

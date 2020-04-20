@@ -1,3 +1,6 @@
+import com.bmuschko.gradle.docker.tasks.container.DockerExecContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerInspectExecContainer
+
 plugins {
     id 'eu.xenit.docker' version '5.0.5' apply false
     id 'eu.xenit.docker-compose' version '5.0.5' apply false
@@ -137,21 +140,47 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         }
     }
 
+    // Execute goss inside the running container 'tomcat'
+    task dockerExecGoss(type: DockerExecContainer) {
+        doFirst {
+            println "Running 'docker exec' for goss checks"
+        }
+        targetContainerId { project.tasks.composeUp.servicesInfos.get('tomcat').getFirstContainer().getContainerId() }
+        withCommand(['/goss/goss', '--gossfile', '/goss.yaml', 'validate', '--color', '--format', 'documentation'])
+    }
+
+    // Validate 'goss' exit code
+    task gossTest(type: DockerInspectExecContainer) {
+        dependsOn dockerExecGoss
+        targetExecId { dockerExecGoss.execIds.get()[0] }
+        onNext { r ->
+            if(r.exitCode) {
+                throw new GradleException("goss exec failed with exit code: " + r.exitCode)
+            }
+        }
+    }
+    project.tasks.check.dependsOn(gossTest)
+
     dockerCompose {
         projectName = "tomcat-${project.name}"
+
+        dockerComposeWorkingDirectory = "${project.parent.project('integration-tests').projectDir}/src/main/compose/"
         useComposeFiles = [
-                "${project.parent.project('integration-tests').projectDir}/src/main/compose/docker-compose.yml"
+                "docker-compose.yml",
+                "docker-compose-goss.yml"
         ]
-        captureContainersOutput = false
 
         // Uncomment for quick iterations when developing integration tests
-        // stopContainers = false
+        //   stopContainers = false
+        captureContainersOutput = false
 
         environment.put 'COMPOSE_TOMCAT_TCP_8080', '8080'
         environment.put 'WAR_PATH', configurations.integrationTestWar.singleFile.absolutePath
 
         // start & stop docker-compose when running tests
         isRequiredBy(project.tasks.test)
+        isRequiredBy(project.tasks.gossTest)
+
     }
 
     // make sure we build ':servlet-info' war artifact before running composeUp

@@ -1,0 +1,4 @@
+file:
+  /usr/local/tomcat/conf/server.xml:
+    title: Check server.xml exists
+    exists: true
