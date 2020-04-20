@@ -123,11 +123,11 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
 
 
     configurations {
-        war
+        integrationTestWar
     }
 
     dependencies {
-        war project(path: ':integration-tests:servlet-info', configuration: 'wars')
+        integrationTestWar project(path: ':integration-tests:servlet-info', configuration: 'wars')
     }
 
     docker {
@@ -148,7 +148,7 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         // stopContainers = false
 
         environment.put 'COMPOSE_TOMCAT_TCP_8080', '8080'
-        environment.put 'WAR_PATH', project.configurations.war.singleFile.absolutePath
+        environment.put 'WAR_PATH', configurations.integrationTestWar.singleFile.absolutePath
 
         // start & stop docker-compose when running tests
         isRequiredBy(project.tasks.test)
