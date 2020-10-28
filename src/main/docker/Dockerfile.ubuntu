@@ -27,14 +27,15 @@ RUN     apt-get update && \
         apt-get install -y curl unzip xmlstarlet && \
         mkdir -pv "${CATALINA_HOME}/shared/classes" && \
         mkdir -pv "${CATALINA_HOME}/shared/lib" && \
-
+        #
+        # Download tomcat package
         set -x \
             && curl --silent -fSL "$TOMCAT_TGZ_URL" -o tomcat.tar.gz \
             && curl --silent -fSL "$TOMCAT_TGZ_URL.asc" -o tomcat.tar.gz.asc \
             && tar -xvf tomcat.tar.gz --strip-components=1 \
             && rm bin/*.bat \
             && rm tomcat.tar.gz* && \
-
+        #
         # Configure AccessLogValve & RemoteIpValve
         xmlstarlet edit --inplace \
             --var valve "/Server/Service[@name='Catalina']/Engine[@name='Catalina']/Host/Valve[@className='org.apache.catalina.valves.AccessLogValve']/@pattern" \
@@ -50,7 +51,7 @@ RUN     apt-get update && \
                 --insert '$valve' --type attr --name protocolHeader --value x-forwarded-proto \
                 --insert '$valve' --type attr --name internalProxies --value "172.(?:1[6-9]|2[0-9]|3[0-1]).\d{1,3}.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}" \
             conf/server.xml && \
-
+        #
         # Configure ports, header size and max threads
         xmlstarlet edit --inplace \
         --var server "/Server/@port" \
@@ -79,19 +80,20 @@ RUN     apt-get update && \
         --var connector "/Server/Service[@name='Catalina']/Connector[@protocol=\"AJP/1.3\"]/@redirectPort" \
            --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
         ${CATALINA_HOME}/conf/server.xml && \
-
-
+        #
+        #
         # Cleanup webapps stuff
         rm -rf ${CATALINA_HOME}/webapps/* && \
-
+        #
         # Create a tomcat user
         useradd -r -u 990 --shell /bin/false tomcat && \
         chown -hR tomcat ${CATALINA_HOME} && \
-
+        #
+        # Clean up
         apt-get --purge -y remove curl unzip xmlstarlet && \
         apt-get --purge -y autoremove && \
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-
+        #
         # gosu
         && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
         && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
@@ -102,14 +104,14 @@ RUN     apt-get update && \
         && chmod +x /usr/local/bin/gosu \
         && gosu nobody true \
         && apt-get purge -y --auto-remove wget && \
-
-
+        #
+        #
         sed -i 's/[a-z,.,1-9,-]*.(FileHandler|AsyncFileHandler)((,\s)|\n)//g' ${CATALINA_HOME}/conf/logging.properties && \
-
+        #
         sed -i 's/^shared.loader=/shared.loader=${catalina.base}\/shared\/classes,${catalina.base}\/shared\/lib\/*.jar/' ${CATALINA_HOME}/conf/catalina.properties && \
         sed -i 's/^\(common.loader=.*\)$/\1,${tomcat.common.loader.append}/' ${CATALINA_HOME}/conf/catalina.properties && \
         sed -i 's/^\(shared.loader=.*\)$/\1,${tomcat.shared.loader.append}/' ${CATALINA_HOME}/conf/catalina.properties && \
-
+        #
         chmod +x /docker-entrypoint.d/85-init-tomcat.sh
 
 EXPOSE 8080
