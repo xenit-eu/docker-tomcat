@@ -11,7 +11,7 @@ ext {
             flavor : 'jdk',
             version: [
                     major: 7,
-                    update: 221
+                    update: 261
             ]
     ]
     os = [

@@ -29,17 +29,19 @@ ARG RPM_XMLSTARLET=http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/x/xmls
 COPY 	85-init-tomcat.sh /docker-entrypoint.d/
 
 RUN     env && \
-
+        #
+        # Create catalina shared library directories
         mkdir -pv "${CATALINA_HOME}/shared/classes" && \
         mkdir -pv "${CATALINA_HOME}/shared/lib" && \
-
+        #
+        # Download tomcat package
         curl --silent -fSL "$TOMCAT_TGZ_URL" \
             | tar xvz \
                 --exclude=webapps/* \
                 --exclude=bin/*.bat \
                 --strip-components=1 \
                 --directory ${CATALINA_HOME} && \
-
+        #
         # Configure AccessLogValve & RemoteIpValve
         rpm --install --force $RPM_LIBXSLT $RPM_XMLSTARLET && \
         xmlstarlet edit --inplace \
@@ -56,7 +58,7 @@ RUN     env && \
                 --insert '$valve' --type attr --name protocolHeader --value x-forwarded-proto \
                 --insert '$valve' --type attr --name internalProxies --value "172.(?:1[6-9]|2[0-9]|3[0-1]).\d{1,3}.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}" \
             conf/server.xml && \
-
+        #
         # Configure ports, header size and max threads
         xmlstarlet edit --inplace \
         --var server "/Server/@port" \
@@ -86,11 +88,11 @@ RUN     env && \
            --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
         ${CATALINA_HOME}/conf/server.xml && \
         rpm --erase xmlstarlet && \
-
+        #
         # Create a tomcat user
         useradd -r -u 990 --shell /bin/false tomcat && \
         chown -hR tomcat ${CATALINA_HOME} && \
-
+        #
         # gosu
         cd /tmp && \
         gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys $GOSU_GPG_KEY && \
@@ -100,13 +102,13 @@ RUN     env && \
         gpg --verify gosu.asc /usr/local/bin/gosu && \
         chmod +x /usr/local/bin/gosu && \
         rm gosu.asc && \
-
+        #
         sed -i 's/[a-z,.,1-9,-]*.(FileHandler|AsyncFileHandler)((,\s)|\n)//g' ${CATALINA_HOME}/conf/logging.properties && \
-
+        #
         sed -i 's/^shared.loader=/shared.loader=${catalina.base}\/shared\/classes,${catalina.base}\/shared\/lib\/*.jar/' ${CATALINA_HOME}/conf/catalina.properties && \
         sed -i 's/^\(common.loader=.*\)$/\1,${tomcat.common.loader.append}/' ${CATALINA_HOME}/conf/catalina.properties && \
         sed -i 's/^\(shared.loader=.*\)$/\1,${tomcat.shared.loader.append}/' ${CATALINA_HOME}/conf/catalina.properties && \
-
+        #
         chmod +x /docker-entrypoint.d/85-init-tomcat.sh
 
 EXPOSE  8080
