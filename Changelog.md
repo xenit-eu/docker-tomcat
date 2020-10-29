@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Changed
 
+* [2020-10-28] [PR #14](https://github.com/xenit-eu/docker-tomcat/pull/14) Updated Tomcat to 7.0.106 / 8.5.59
 * [2020-10-28] [PR #13](https://github.com/xenit-eu/docker-tomcat/pull/13) Updated JDK to jdk-11.0.9 and jdk-8u272 and for CentOS to jdk-7u261
 
 ## 2020-04
