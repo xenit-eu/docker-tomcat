@@ -1,0 +1,25 @@
+name: Continuous Integration
+on: [ push, pull_request ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Java setup
+        # use joschi/setup-jdk instead to use openjdk? (https://github.com/marketplace/actions/setup-adoptopenjdk)
+        uses: actions/setup-java@v1
+        with:
+          # Using java 8 to replicate travis (See .travis.yml)
+          java-version: 8
+      # Not caching the gradle files on advice of Lars;
+      # caching behaviour is apparently trash due to differences between gradle versions and not being up to date.
+      - name: Gradle check
+        run: ./gradlew check --info
+      - name: Publish docker image
+        if: github.ref == 'refs/head/master'
+        env:
+          # Use org secrets
+          DOCKER_USER: xenitpublisher
+          DOCKER_PUBLISH_SECRET: ${{ secrets.DOCKER_PUBLISH_SECRET }}
+        run: ./gradlew publishDockerImage --info
