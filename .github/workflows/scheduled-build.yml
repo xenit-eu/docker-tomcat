@@ -25,5 +25,5 @@ jobs:
         env:
           BRANCH_NAME: ${{ matrix.branch }}
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
-            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: ./gradlew pushDockerImage -PbranchName=$BRANCH_NAME --info
