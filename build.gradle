@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'eu.xenit.docker' version '5.1.1' apply false
     id 'eu.xenit.docker-compose' version '5.1.1' apply false
@@ -6,6 +8,32 @@ plugins {
 repositories {
     mavenCentral()
     jcenter()
+}
+
+String getBranchName(Project project) {
+    return project.hasProperty('branchName') ? project.branchName : (System.getenv('BRANCH_NAME') ?: 'local')
+}
+
+String getTagQualifier(String branchName) {
+    if (branchName.endsWith('release')) {
+        return ''
+    }
+
+    if (branchName.endsWith('master')) {
+        return '-SNAPSHOT'
+    }
+
+    return '-' + branchName.split('/').last() + '-SNAPSHOT'
+}
+
+String getBuildTime(String branchName) {
+    def dateFormatPattern = "-yyyyMMdd"
+    if (!branchName.endsWith('release')) {
+        dateFormatPattern += ".HHmm"
+    }
+    def df = new SimpleDateFormat(dateFormatPattern)
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(new Date())
 }
 
 String[] calcTags(Project project) {
@@ -42,7 +70,18 @@ String[] calcTags(Project project) {
         }
     }
 
-    return tags.unique()
+    def allTags = tags.unique()
+
+    def branchName = getBranchName(project)
+    def tagQualifier = getTagQualifier(branchName)
+    def buildTime = getBuildTime(branchName)
+    def tagsWithQualifier = allTags.collect { it + "${tagQualifier}" }
+    def timestampedTagsWithQualifier = allTags.collect { it + "${tagQualifier}${buildTime}" }
+
+    if (!branchName.endsWith('release') && !branchName.equals('local')) {
+        return tagsWithQualifier + timestampedTagsWithQualifier
+    }
+    return allTags + timestampedTagsWithQualifier
 }
 
 String getDockerBaseImage(Project p) {
@@ -174,5 +213,3 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         }
     }
 }
-
-
