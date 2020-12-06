@@ -12,7 +12,7 @@ Apache Tomcat is an open source web server and servlet container, by the Apache 
 * `alfresco-4.2-centos`, `7.0.106-jdk-7u261-centos-7`, `7.0-jdk-7u261-centos-7`, `7-jdk-7u261-centos-7`
 
 Additional tags are provided:
-* tags containing a `-SNAPSHOT` or `-SNAPSHOT-yyyymmdd.hhmm` postfix are development artifacts (from the mmaster branch). Do not use them in a production environment.
+* tags containing a `-SNAPSHOT` or `-SNAPSHOT-yyyymmdd.hhmm` postfix are development artifacts (from the master branch). Do not use them in a production environment.
 * tags without any postfix or containing a `-yyyymmdd` postfix are release artifacts
 
 **NOTE**: Timestamped tags are **NOT** maintained.
