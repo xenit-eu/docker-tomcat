@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## 2020-12
+
+### Changed
+
+* [2020-12-05] [I-16](https://github.com/xenit-eu/docker-tomcat/issues/16) Move build from Travis to GitHub Actions
+
 ## 2020-10
 
 ### Changed

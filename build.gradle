@@ -1,11 +1,27 @@
 plugins {
-    id 'eu.xenit.docker' version '5.1.0' apply false
-    id 'eu.xenit.docker-compose' version '5.1.0' apply false
+    id 'eu.xenit.docker' version '5.1.1' apply false
+    id 'eu.xenit.docker-compose' version '5.1.1' apply false
 }
 
 repositories {
     mavenCentral()
     jcenter()
+}
+
+String getBranchName(Project project) {
+    return project.hasProperty('branchName') ? project.branchName : (System.getenv('BRANCH_NAME') ?: 'local')
+}
+
+String getTagQualifier(String branchName) {
+    if (branchName.endsWith('release')) {
+        return ''
+    }
+
+    if (branchName.endsWith('master')) {
+        return '-SNAPSHOT'
+    }
+
+    return '-' + branchName.split('/').last() + '-SNAPSHOT'
 }
 
 String[] calcTags(Project project) {
@@ -42,7 +58,9 @@ String[] calcTags(Project project) {
         }
     }
 
-    return tags.unique()
+    def allTags = tags.unique()
+    def tagsWithQualifier = allTags.collect { it + getTagQualifier(getBranchName(project)) }
+    return tagsWithQualifier
 }
 
 String getDockerBaseImage(Project p) {
@@ -174,5 +192,3 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         }
     }
 }
-
-

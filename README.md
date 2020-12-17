@@ -11,6 +11,10 @@ Apache Tomcat is an open source web server and servlet container, by the Apache 
 * `alfresco-4.2-ubuntu`, `7.0.106-jdk-7u211-trusty`, `7.0-jdk-7u211-trusty`, `7-jdk-7u211-trusty`
 * `alfresco-4.2-centos`, `7.0.106-jdk-7u261-centos-7`, `7.0-jdk-7u261-centos-7`, `7-jdk-7u261-centos-7`
 
+Additional tags are provided:
+* tags containing a `-SNAPSHOT` postfix are development artifacts (from the master branch). Do not use them in a production environment.
+* tags without any postfix are release artifacts
+
 ## Environment variables
 
 There are several environment variables available to tweak the behaviour. While none of the variables are required, they may significantly aid you in using these images.
@@ -77,7 +81,7 @@ All the available Tomcat images are built on top of the `docker.io/xenit/openjdk
 
 ### How to build
 
-Release builds are produced by [Travis](https://travis-ci.org/xenit-eu/) driving Gradle from a `.travis.yml` file.
+Builds are produced by [GitHub Actions](https://docs.github.com/en/free-pro-team@latest/actions) driving Gradle from a GitHub workflow file.
 
 To build a local version of the _tomcat_ images:
 
