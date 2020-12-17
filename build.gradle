@@ -13,11 +13,11 @@ String getBranchName(Project project) {
 }
 
 String getTagQualifier(String branchName) {
-    if (branchName.endsWith('release')) {
+    if (branchName == 'refs/heads/release') {
         return ''
     }
 
-    if (branchName.endsWith('master')) {
+    if (branchName == 'refs/heads/master') {
         return '-SNAPSHOT'
     }
 
