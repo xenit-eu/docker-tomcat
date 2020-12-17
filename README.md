@@ -17,8 +17,9 @@ Additional tags are provided:
 
 ## Environment variables
 
-There are several environment variables available to tweak the behaviour. While none of the variables are required, they may significantly aid you in using these images.
-The variables are read by an init script which further sets JAVA_OPTS variables to be used in tomcat's templated configuration file server.xml.
+There are several environment variables available to tweak the behaviour. While none of the variables are required, 
+they may significantly aid you in using these images. The variables are read by an init script which further sets 
+JAVA_OPTS variables to be used in tomcat's templated configuration file server.xml.
 
 Environment variables:
 
@@ -81,7 +82,8 @@ All the available Tomcat images are built on top of the `docker.io/xenit/openjdk
 
 ### How to build
 
-Builds are produced by [GitHub Actions](https://docs.github.com/en/free-pro-team@latest/actions) driving Gradle from a GitHub workflow file.
+Builds are produced by [GitHub Actions](https://github.com/xenit-eu/docker-tomcat/actions) driving Gradle from a
+GitHub workflow file.
 
 To build a local version of the _tomcat_ images:
 
