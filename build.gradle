@@ -5,7 +5,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 String getBranchName(Project project) {
@@ -86,7 +85,6 @@ task printTags {
 configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     project.projectDir.mkdirs()
