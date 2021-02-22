@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Changed
 
+* [2021-02-22] [PR #23](https://github.com/xenit-eu/docker-tomcat/pull/23) Updated Java8 to jdk-8u275-b01
 * [2021-02-01] [PR #20](https://github.com/xenit-eu/docker-tomcat/pull/20) Updated JDK to jdk-11.0.10
 
 ## 2020-12
