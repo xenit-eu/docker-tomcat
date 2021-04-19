@@ -1,14 +1,29 @@
 plugins {
-    id 'eu.xenit.docker' version '5.0.1' apply false
-    id 'eu.xenit.docker-compose' version '5.0.1' apply false
+    id 'eu.xenit.docker' version '5.1.1' apply false
+    id 'eu.xenit.docker-compose' version '5.1.1' apply false
 }
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
-String[] calcTags (Project project) {
+String getBranchName(Project project) {
+    return project.hasProperty('branchName') ? project.branchName : (System.getenv('BRANCH_NAME') ?: 'local')
+}
+
+String getTagQualifier(String branchName) {
+    if (branchName == 'refs/heads/release') {
+        return ''
+    }
+
+    if (branchName == 'refs/heads/master') {
+        return '-SNAPSHOT'
+    }
+
+    return '-' + branchName.split('/').last() + '-SNAPSHOT'
+}
+
+String[] calcTags(Project project) {
     def tomcat = project.ext.tomcat
     def java = project.ext.java
     def os = project.ext.os
@@ -24,7 +39,7 @@ String[] calcTags (Project project) {
     if (java.version.update != null)
         javaVersion += "u${java.version.update}"
 
-    if(os.name == null) os.name="${os.vendor}-${os.version}"
+    if (os.name == null) os.name = "${os.vendor}-${os.version}"
 
     tags << "${version.major}.${version.minor}.${version.rev}-${javaVersion}-${os.name}"
 
@@ -42,10 +57,12 @@ String[] calcTags (Project project) {
         }
     }
 
-    return tags.unique()
+    def allTags = tags.unique()
+    def tagsWithQualifier = allTags.collect { it + getTagQualifier(getBranchName(project)) }
+    return tagsWithQualifier
 }
 
-String getDockerBaseImage (Project p) {
+String getDockerBaseImage(Project p) {
     String javaFlavor = p.java.flavor == 'jre' ? 'server-jre' : p.java.flavor
     String javaPart = "${javaFlavor}-${p.java.version.major}"
     if (p.java.version.update)
@@ -59,8 +76,8 @@ String getDockerBaseImage (Project p) {
 
 task printTags {
     doFirst {
-        project.subprojects.collect().reverse().findAll{ it.name.startsWith("tomcat-") }.each{
-            println "* ${calcTags(it).collect{"`${it}`"}.join(', ')}"
+        project.subprojects.collect().reverse().findAll { it.name.startsWith("tomcat-") }.each {
+            println "* ${calcTags(it).collect { "`${it}`" }.join(', ')}"
         }
     }
 }
@@ -68,7 +85,6 @@ task printTags {
 configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     project.projectDir.mkdirs()
@@ -93,24 +109,19 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
 
     buildDockerImage.dependsOn(copyDocker)
 
-    dockerFile {
+    dockerBuild {
         dockerFile = file("${project.buildDir}/docker/Dockerfile")
-        dockerBuild {
-            repository = 'docker.io/xenit/tomcat'
-            //tags = calcTags(project.ext.tomcat, project.ext.java, project.ext.os, project.hasProperty('extraTags') ? project.extraTags : [])
-            tags = calcTags(project).collect()
-            pull = true
-            automaticTags = false
-        }
+        repositories = ['docker.io/xenit/tomcat']
+        tags = calcTags(project).collect()
     }
 
     buildDockerImage {
         buildArgs = [
-                'TOMCAT_MAJOR' : "${project.tomcat.version.major}",
-                'TOMCAT_MINOR' : "${project.tomcat.version.minor}",
+                'TOMCAT_MAJOR'   : "${project.tomcat.version.major}",
+                'TOMCAT_MINOR'   : "${project.tomcat.version.minor}",
                 'TOMCAT_REVISION': "${project.tomcat.version.rev}",
 
-                'BASE_IMAGE': getDockerBaseImage(project)
+                'BASE_IMAGE'     : getDockerBaseImage(project)
         ]
 
         if (project.hasProperty('extraBuildArgs'))
@@ -122,13 +133,12 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
     }
 
 
-
     configurations {
-        war
+        integrationTestWar
     }
 
     dependencies {
-        war project(path: ':integration-tests:servlet-info', configuration: 'wars')
+        integrationTestWar project(path: ':integration-tests:servlet-info', configuration: 'wars')
     }
 
     docker {
@@ -140,14 +150,16 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
 
     dockerCompose {
         projectName = "tomcat-${project.name}"
-        useComposeFiles = ["${project.parent.project('integration-tests').projectDir}/src/main/compose/docker-compose.yml"]
+        useComposeFiles = [
+                "${project.parent.project('integration-tests').projectDir}/src/main/compose/docker-compose.yml"
+        ]
         captureContainersOutput = false
 
         // Uncomment for quick iterations when developing integration tests
         // stopContainers = false
 
         environment.put 'COMPOSE_TOMCAT_TCP_8080', '8080'
-        environment.put 'WAR_PATH', project.configurations.war.singleFile.absolutePath
+        environment.put 'WAR_PATH', configurations.integrationTestWar.singleFile.absolutePath
 
         // start & stop docker-compose when running tests
         isRequiredBy(project.tasks.test)
@@ -170,14 +182,11 @@ configure(subprojects.findAll { it.name.startsWith("tomcat-") }) {
         doFirst {
             dockerCompose.exposeAsSystemProperties(test)
 
-            if("${project.java.version.major}"=='11' && "${project.os.vendor}"=='ubuntu')
+            if ("${project.java.version.major}" == '11' && "${project.os.vendor}" == 'ubuntu')
                 systemProperty 'test.java.version', '11'
             else
                 systemProperty 'test.java.version', "1.${project.java.version.major}"
             systemProperty 'test.java.flavor', project.java.flavor
         }
     }
-
 }
-
-

@@ -1,10 +1,10 @@
 buildscript {
     ext {
+        // can't upgrade to Spring Boot 2 as long as we need to support Java 7
         springBootVersion = '1.5.11.RELEASE'
     }
     repositories {
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -25,7 +25,6 @@ targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 springBoot {
@@ -39,19 +38,19 @@ configurations {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-web')
 
     // Required for Tomcat 7.0 support
-    compile('javax.el:javax.el-api:3.0.0')
+    implementation('javax.el:javax.el-api:3.0.0')
 
-    runtime('org.springframework.boot:spring-boot-devtools')
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 artifacts {
-    wars war.archivePath
+    wars war.archiveFile
 }
 
 

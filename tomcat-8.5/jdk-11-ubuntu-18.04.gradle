@@ -3,7 +3,7 @@ ext {
             version: [
                     major: 8,
                     minor: 5,
-                    rev: 53,
+                    rev: 59,
                     canonical: true
             ]
     ]
@@ -11,7 +11,7 @@ ext {
             flavor : 'jdk',
             version: [
                     major: 11,
-                    update: 3
+                    update: 10
             ],
             canonical: true
     ]
@@ -20,5 +20,5 @@ ext {
             version: '18.04',
             name: 'bionic'
     ]
-    extraTags = [ "alfresco-6.2-ubuntu", "alfresco-6.1-ubuntu", "alfresco-6.0-ubuntu" ]
+    extraTags = [ "alfresco-7.0-ubuntu", "alfresco-6.2-ubuntu", "alfresco-6.1-ubuntu", "alfresco-6.0-ubuntu" ]
 }
