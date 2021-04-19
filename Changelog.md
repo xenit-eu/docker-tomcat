@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Changed
 
+* [DOCKER-376] Support for application log deletion 	
 * [DOCKER-313] Updated Tomcat to 7.0.103 / 8.5.53 
 * [DOCKER-297] Base JDK-8 ubuntu images on Bionic (18.04 LTS)
 * [DOCKER-295] Make `relaxedQueryChars` and `relaxedPathChars` configurable

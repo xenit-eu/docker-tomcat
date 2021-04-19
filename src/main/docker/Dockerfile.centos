@@ -22,7 +22,7 @@ ENV GOSU_GPG_KEY=B42F6819007F00F88E364FD4036A9C25BF357DD4
 
 ENV TOMCAT_PORT=8080
 
-ARG RPM_LIBXSLT=http://mirror.centos.org/centos/7/os/x86_64/Packages/libxslt-1.1.28-5.el7.x86_64.rpm
+ARG RPM_LIBXSLT=http://mirror.centos.org/centos/7/os/x86_64/Packages/libxslt-1.1.28-6.el7.x86_64.rpm
 ARG RPM_XMLSTARLET=http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/x/xmlstarlet-1.6.1-1.el7.x86_64.rpm
 
 # copy init file
@@ -86,6 +86,12 @@ RUN     env && \
            --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
         ${CATALINA_HOME}/conf/server.xml && \
         rpm --erase xmlstarlet && \
+
+	# Configure logging.properties
+        echo "1catalina.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_APPLICATIONLOG_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+        echo "2localhost.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_APPLICATIONLOG_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+        echo "3manager.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_APPLICATIONLOG_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+        echo "4host-manager.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_APPLICATIONLOG_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
 
         # Create a tomcat user
         useradd -r -u 990 --shell /bin/false tomcat && \
