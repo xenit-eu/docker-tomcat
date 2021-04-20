@@ -33,6 +33,7 @@ Environment variables:
 | TOMCAT_MAX_THREADS          |  200                            | -DTOMCAT_MAX_THREADS or -DMAX_THREADS |
 | TOMCAT_ACCESSLOG_ROTATE     |  true                           | -DTOMCAT_ACCESSLOG_ROTATE    |
 | TOMCAT_ACCESSLOG_MAXDAYS    |  -1                             | -DTOMCAT_ACCESSLOG_MAXDAYS   |
+| TOMCAT_LOGGING_MAXDAYS      |  5                              | -DTOMCAT_LOGGING_MAXDAYS   |
 | TOMCAT_RELAXED_QUERY_CHARS  |  ""                             | -DTOMCAT_RELAXED_QUERY_CHARS |
 | TOMCAT_RELAXED_PATH_CHARS   |  ""                             | -DTOMCAT_RELAXED_PATH_CHARS  |
 
@@ -45,7 +46,7 @@ Channel [#docker](https://xenitengineering.slack.com/app_redirect?channel=docker
 
 **Maintained by:**
 
-Toon Geens <toon.geens@xenit.eu>, Roxana Angheluta <roxana.angheluta@xenit.eu>
+Toon Geens <toon.geens@xenit.eu>
 
 **Supported Architectures:**
 
