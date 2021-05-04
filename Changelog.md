@@ -4,10 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## 2021-02
+## 2021-04
 
 ### Changed
 
+* [2021-04-19] [PR #27](https://github.com/xenit-eu/docker-tomcat/pull/27) Support for application log deletion 	
+
+## 2021-02
+
+### Changed	
+	
 * [2021-02-22] [PR #23](https://github.com/xenit-eu/docker-tomcat/pull/23) Updated Java8 to jdk-8u275-b01
 * [2021-02-01] [PR #20](https://github.com/xenit-eu/docker-tomcat/pull/20) Updated JDK to jdk-11.0.10
 

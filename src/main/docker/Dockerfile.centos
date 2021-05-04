@@ -88,7 +88,13 @@ RUN     env && \
            --update '$connector' --value \$\{TOMCAT_PORT_SSL\} \
         ${CATALINA_HOME}/conf/server.xml && \
         rpm --erase xmlstarlet && \
-        #
+
+	# Configure logging.properties
+        echo "1catalina.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_LOGGING_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+        echo "2localhost.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_LOGGING_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+        echo "3manager.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_LOGGING_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+        echo "4host-manager.org.apache.juli.AsyncFileHandler.maxDays = \${TOMCAT_LOGGING_MAXDAYS}" >>${CATALINA_HOME}/conf/logging.properties && \
+
         # Create a tomcat user
         useradd -r -u 990 --shell /bin/false tomcat && \
         chown -hR tomcat ${CATALINA_HOME} && \
