@@ -8,7 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Changed
 
-* [2021-12-10] [PR ##] Removed `centos` builds
+* [2021-12-10] [PR #29](https://github.com/xenit-eu/docker-tomcat/pull/29) Removed `centos` builds
+* [2021-12-10] [PR #30](https://github.com/xenit-eu/docker-tomcat/pull/29) Use upstream images with unspecified jdk-minor version
 
 ## 2021-04
 

@@ -10,8 +10,7 @@ ext {
     java = [
             flavor : 'jdk',
             version: [
-                    major: 8,
-                    update: 275
+                    major: 8
             ],
             canonical: true
 
