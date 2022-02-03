@@ -1,9 +1,9 @@
 ext {
     tomcat = [
             version: [
-                    major: 8,
-                    minor: 5,
-                    rev: 59,
+                    major: 9,
+                    minor: 0,
+                    rev: 58,
                     canonical: true
             ]
     ]
@@ -16,8 +16,8 @@ ext {
     ]
     os = [
             vendor: 'ubuntu',
-            version: '18.04',
+            version: '20.04',
             name: 'bionic'
     ]
-    extraTags = [ "alfresco-6.2-ubuntu", "alfresco-6.1-ubuntu", "alfresco-6.0-ubuntu" ]
+    extraTags = [ "alfresco-7.1-ubuntu", "alfresco-7.0-ubuntu" ]
 }
