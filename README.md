@@ -6,10 +6,9 @@ Apache Tomcat is an open source web server and servlet container, by the Apache 
 
 ## Supported tags
 
-* `alfresco-7.0-ubuntu`, `alfresco-6.2-ubuntu`, `alfresco-6.1-ubuntu`, `alfresco-6.0-ubuntu`, `8.5.59-jdk-11u9-bionic`, `8.5-jdk-11u9-bionic`, `8-jdk-11u9-bionic`, `8.5.59-bionic`, `8.5-bionic`, `8-bionic`
+* `alfresco-7.1-ubuntu`, `alfresco-7.0-ubuntu`, `alfresco-6.2-ubuntu`, `alfresco-6.1-ubuntu`, `alfresco-6.0-ubuntu`, `8.5.59-jdk-11u9-bionic`, `8.5-jdk-11u9-bionic`, `8-jdk-11u9-bionic`, `8.5.59-bionic`, `8.5-bionic`, `8-bionic`
 * `alfresco-5.2-ubuntu`, `alfresco-5.1-ubuntu`, `alfresco-5.0-ubuntu`, `7.0.106-jdk-8u272-bionic`, `7.0-jdk-8u272-bionic`, `7-jdk-8u272-bionic`, `7.0.106-bionic`, `7.0-bionic`, `7-bionic`
 * `alfresco-4.2-ubuntu`, `7.0.106-jdk-7u211-trusty`, `7.0-jdk-7u211-trusty`, `7-jdk-7u211-trusty`
-* `alfresco-4.2-centos`, `7.0.106-jdk-7u261-centos-7`, `7.0-jdk-7u261-centos-7`, `7-jdk-7u261-centos-7`
 
 Additional tags are provided:
 * tags containing a `-SNAPSHOT` postfix are development artifacts (from the master branch). Do not use them in a production environment.
@@ -66,12 +65,13 @@ tomcat:<version>[-<java>[-<os>]]
 
 * **version**: the Tomcat version
 * **java**: the Java distribution and version, for example `jdk-8` or `jdk-8u272-bionic`
-* **os**: the Operating System, for example `bionic` or `centos-7`
+* **os**: the Operating System, for example `bionic`
 
 ### Tomcat versions
 
 In general, the latest update (minor version) of the last few major Tomcat releases are maintained:
 
+* `9.0`
 * `8.5` - _Tomcat 8.5_ is thought as a replacement for _Tomcat 8.0_. _Tomcat 8.0_ is [end of life](http://tomcat.apache.org/tomcat-80-eol.html) and is not supported.
 * `7.0`
 
