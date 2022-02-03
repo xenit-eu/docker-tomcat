@@ -71,6 +71,7 @@ tomcat:<version>[-<java>[-<os>]]
 
 In general, the latest update (minor version) of the last few major Tomcat releases are maintained:
 
+* `9.0`
 * `8.5` - _Tomcat 8.5_ is thought as a replacement for _Tomcat 8.0_. _Tomcat 8.0_ is [end of life](http://tomcat.apache.org/tomcat-80-eol.html) and is not supported.
 * `7.0`
 
