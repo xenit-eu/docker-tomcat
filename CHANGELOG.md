@@ -4,11 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## 2022-03
+
+### Added
+
+* [2022-03-30] [PR #32](https://github.com/xenit-eu/docker-tomcat/pull/31) Added alfresco-7.2-ubuntu tag
+
 ## 2022-02
 
 ### Added
 
-* [2021-02-02] [PR #31](https://github.com/xenit-eu/docker-tomcat/pull/31) Added tomcat 9 build + alfresco-7.1-ubuntu tag
+* [2022-02-02] [PR #31](https://github.com/xenit-eu/docker-tomcat/pull/31) Added tomcat 9 build + alfresco-7.1-ubuntu tag
 
 ## 2021-04
 

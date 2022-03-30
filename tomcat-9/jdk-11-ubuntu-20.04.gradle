@@ -19,5 +19,5 @@ ext {
             version: '20.04',
             name: 'bionic'
     ]
-    extraTags = [ "alfresco-7.1-ubuntu", "alfresco-7.0-ubuntu" ]
+    extraTags = [ "alfresco-7.2-ubuntu", "alfresco-7.1-ubuntu", "alfresco-7.0-ubuntu" ]
 }
