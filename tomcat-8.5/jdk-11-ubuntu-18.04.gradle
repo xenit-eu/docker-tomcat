@@ -3,7 +3,7 @@ ext {
             version: [
                     major: 8,
                     minor: 5,
-                    rev: 59,
+                    rev: 78,
                     canonical: true
             ]
     ]
