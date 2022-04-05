@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## 2022-04
+
+### Changed
+
+* [2022-04-05] [PR #36](https://github.com/xenit-eu/docker-tomcat/pull/36) Update tomcat 8.5 & 9 to latest microversion to mitigate cve-2022-22965
+
 ## 2022-03
 
 ### Added
